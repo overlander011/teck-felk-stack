@@ -42,6 +42,22 @@ services:
     depends_on:
       - elasticsearch
 
+  filebeat:
+    image: tech-stack-elk-filebeat-dockerlog/filebeat:1.0.0
+    #command: filebeat -e -d filebeat.yml -d "publish"
+    build:
+      context: filebeat/
+      dockerfile: Dockerfile
+    volumes:
+      # needed to access all docker logs (read only) : all log path in docker container
+      - "/var/lib/docker/containers:/usr/share/dockerlogs/data"
+      # needed to access additional informations about containers
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - elk
+    depends_on:
+      - logstash
+
 networks:
   elk:
     driver: bridge

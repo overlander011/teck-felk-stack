@@ -1,0 +1,15 @@
+filebeat.config.inputs:
+  enabled: true
+  path: configs/*.yml
+  reload.enabled: true
+  reload.period: 10s
+
+filebeat.prospectors:
+- type: docker
+  combine_partial: true
+  containers.ids: 
+    - 'ded424ed9a0566a568ca70f795ea357df76061ba28e8b7de2ea9cfb1e54af182'
+
+# setup filebeat to send output to logstash
+output.logstash:
+  hosts: "logstash:5000"
